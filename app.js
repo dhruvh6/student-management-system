@@ -27,7 +27,34 @@ let students = loadStudents();
 
 /* ---------- feature code ---------- */
 
+/* SMS-1 - teacher login */
+
+const CREDENTIALS = { username: 'teacher', password: 'sms123' };
+
+function handleLogin() {
+  const user = document.getElementById('username').value.trim();
+  const pass = document.getElementById('password').value;
+  const error = document.getElementById('login-error');
+
+  if (user === CREDENTIALS.username && pass === CREDENTIALS.password) {
+    error.textContent = '';
+    document.getElementById('login-panel').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('session-label').textContent = 'Signed in as ' + user;
+  } else {
+    error.textContent = 'Wrong username or password.';
+  }
+}
+
+function setupLogin() {
+  document.getElementById('login-btn').addEventListener('click', handleLogin);
+  document.getElementById('password').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') handleLogin();
+  });
+}
+
 function init() {
+  setupLogin();
   console.log('SMS ready -', students.length, 'students loaded');
 }
 
