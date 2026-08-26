@@ -80,6 +80,8 @@ function renderStudents(list) {
 function init() {
   setupLogin();
   renderStudents(students);
+function init() {
+  setupLogin();
   console.log('SMS ready -', students.length, 'students loaded');
 }
 
