@@ -26,7 +26,16 @@
     <div id="app" class="hidden">
       <!-- SMS-2: add student form goes here -->
       <!-- SMS-6: search box goes here -->
-      <!-- SMS-3: student table goes here -->
+      <div class="panel">
+        <h2>Students</h2>
+        <table>
+          <thead>
+            <tr><th>Roll</th><th>Name</th><th>Class</th><th>Marks</th></tr>
+          </thead>
+          <tbody id="student-rows"></tbody>
+        </table>
+        <div id="empty-state" class="empty hidden">No students yet.</div>
+      </div>
     </div>
   </main>
 
