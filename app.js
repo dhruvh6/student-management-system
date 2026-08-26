@@ -27,7 +27,32 @@ let students = loadStudents();
 
 /* ---------- feature code ---------- */
 
+/* SMS-3 - render the student table */
+
+function renderStudents(list) {
+  const body = document.getElementById('student-rows');
+  const empty = document.getElementById('empty-state');
+  body.innerHTML = '';
+
+  if (list.length === 0) {
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  list.forEach(function (student) {
+    const row = document.createElement('tr');
+    row.innerHTML =
+      '<td>' + student.roll + '</td>' +
+      '<td>' + student.name + '</td>' +
+      '<td>' + student.cls + '</td>' +
+      '<td>' + student.marks + '</td>';
+    body.appendChild(row);
+  });
+}
+
 function init() {
+  renderStudents(students);
   console.log('SMS ready -', students.length, 'students loaded');
 }
 
