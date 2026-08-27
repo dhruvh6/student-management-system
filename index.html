@@ -35,7 +35,10 @@
         </div>
         <button id="add-btn">Add student</button>
       </div>
-      <!-- SMS-6: search box goes here -->
+      <div class="panel">
+        <label for="search-box">Search by name or roll number</label>
+        <input id="search-box" type="text" placeholder="Type to filter">
+      </div>
       <div class="panel">
         <h2>Students</h2>
         <table>
@@ -44,7 +47,7 @@
           </thead>
           <tbody id="student-rows"></tbody>
         </table>
-        <div id="empty-state" class="empty hidden">No students yet.</div>
+        <div id="empty-state" class="empty hidden">No students match.</div>
       </div>
     </div>
   </main>
