@@ -72,7 +72,8 @@ function renderStudents(list) {
       '<td>' + student.roll + '</td>' +
       '<td>' + student.name + '</td>' +
       '<td>' + student.cls + '</td>' +
-      '<td>' + student.marks + '</td>';
+      '<td>' + student.marks + '</td>' +
+      '<td><button class="small ghost" data-edit="' + student.roll + '">Edit</button></td>';
     body.appendChild(row);
   });
 }
@@ -135,11 +136,46 @@ function setupSearch() {
   document.getElementById('search-box').addEventListener('input', applySearch);
 }
 
+/* SMS-7 - edit a student record */
+
+function startEdit(roll) {
+  const student = students.find(function (s) { return s.roll === roll; });
+  if (!student) return;
+
+  const name = prompt('Name', student.name);
+  if (name === null) return;
+  const cls = prompt('Class', student.cls);
+  if (cls === null) return;
+  const marks = prompt('Marks', student.marks);
+  if (marks === null) return;
+
+  if (!name.trim() || !cls.trim() || !marks.trim()) {
+    alert('Every field is required. Nothing was changed.');
+    return;
+  }
+
+  students = students.map(function (s) {
+    if (s.roll !== roll) return s;
+    return { roll: s.roll, name: name.trim(), cls: cls.trim(), marks: Number(marks) };
+  });
+
+  saveStudents(students);
+  applySearch();
+}
+
+function setupRowActions() {
+  document.getElementById('student-rows').addEventListener('click', function (event) {
+    const editRoll = event.target.getAttribute('data-edit');
+    if (editRoll) startEdit(editRoll);
+  });
+}
+
 function init() {
   setupLogin();
   renderStudents(students);
   setupAdd();
   setupSearch();
+  setupRowActions();
   console.log('SMS ready -', students.length, 'students loaded');
 }
 
