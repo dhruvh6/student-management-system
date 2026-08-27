@@ -73,7 +73,10 @@ function renderStudents(list) {
       '<td>' + student.name + '</td>' +
       '<td>' + student.cls + '</td>' +
       '<td>' + student.marks + '</td>' +
-      '<td><button class="small ghost" data-edit="' + student.roll + '">Edit</button></td>';
+      '<td>' +
+        '<button class="small ghost" data-edit="' + student.roll + '">Edit</button> ' +
+        '<button class="small danger" data-delete="' + student.roll + '">Delete</button>' +
+      '</td>';
     body.appendChild(row);
   });
 }
@@ -166,8 +169,23 @@ function startEdit(roll) {
 function setupRowActions() {
   document.getElementById('student-rows').addEventListener('click', function (event) {
     const editRoll = event.target.getAttribute('data-edit');
+    const deleteRoll = event.target.getAttribute('data-delete');
     if (editRoll) startEdit(editRoll);
+    if (deleteRoll) deleteStudent(deleteRoll);
   });
+}
+
+/* SMS-8 - remove a student after confirming */
+
+function deleteStudent(roll) {
+  const student = students.find(function (s) { return s.roll === roll; });
+  if (!student) return;
+
+  if (!confirm('Remove ' + student.name + ' (roll ' + roll + ')?')) return;
+
+  students = students.filter(function (s) { return s.roll !== roll; });
+  saveStudents(students);
+  applySearch();
 }
 
 function init() {
