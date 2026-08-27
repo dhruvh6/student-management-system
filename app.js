@@ -77,9 +77,47 @@ function renderStudents(list) {
   });
 }
 
+/* SMS-2 - add a new student */
+
+function clearForm() {
+  document.getElementById('add-roll').value = '';
+  document.getElementById('add-name').value = '';
+  document.getElementById('add-cls').value = '';
+  document.getElementById('add-marks').value = '';
+  document.getElementById('add-error').textContent = '';
+}
+
+function addStudent() {
+  const roll = document.getElementById('add-roll').value.trim();
+  const name = document.getElementById('add-name').value.trim();
+  const cls = document.getElementById('add-cls').value.trim();
+  const marks = document.getElementById('add-marks').value.trim();
+  const error = document.getElementById('add-error');
+
+  if (!roll || !name || !cls || !marks) {
+    error.textContent = 'Every field is required.';
+    return;
+  }
+
+  if (students.some(function (s) { return s.roll === roll; })) {
+    error.textContent = 'Roll number ' + roll + ' already exists.';
+    return;
+  }
+
+  students.push({ roll: roll, name: name, cls: cls, marks: Number(marks) });
+  saveStudents(students);
+  renderStudents(students);
+  clearForm();
+}
+
+function setupAdd() {
+  document.getElementById('add-btn').addEventListener('click', addStudent);
+}
+
 function init() {
   setupLogin();
   renderStudents(students);
+  setupAdd();
   console.log('SMS ready -', students.length, 'students loaded');
 }
 

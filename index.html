@@ -24,7 +24,17 @@
     </div>
 
     <div id="app" class="hidden">
-      <!-- SMS-2: add student form goes here -->
+      <div class="panel">
+        <h2>Add a student</h2>
+        <div id="add-error" class="error"></div>
+        <div class="row">
+          <div><label for="add-roll">Roll number</label><input id="add-roll" type="text"></div>
+          <div><label for="add-name">Name</label><input id="add-name" type="text"></div>
+          <div><label for="add-cls">Class</label><input id="add-cls" type="text"></div>
+          <div><label for="add-marks">Marks</label><input id="add-marks" type="number"></div>
+        </div>
+        <button id="add-btn">Add student</button>
+      </div>
       <!-- SMS-6: search box goes here -->
       <div class="panel">
         <h2>Students</h2>
