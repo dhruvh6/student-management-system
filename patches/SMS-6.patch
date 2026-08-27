@@ -1,0 +1,71 @@
+diff --git a/app.js b/app.js
+index f36ba54..cefe836 100644
+--- a/app.js
++++ b/app.js
+@@ -106,7 +106,7 @@ function addStudent() {
+ 
+   students.push({ roll: roll, name: name, cls: cls, marks: Number(marks) });
+   saveStudents(students);
+-  renderStudents(students);
++  applySearch();
+   clearForm();
+ }
+ 
+@@ -114,10 +114,32 @@ function setupAdd() {
+   document.getElementById('add-btn').addEventListener('click', addStudent);
+ }
+ 
++/* SMS-6 - filter the table by name or roll number */
++
++function applySearch() {
++  const term = document.getElementById('search-box').value.trim().toLowerCase();
++
++  if (!term) {
++    renderStudents(students);
++    return;
++  }
++
++  const matches = students.filter(function (s) {
++    return s.name.toLowerCase().includes(term) || s.roll.toLowerCase().includes(term);
++  });
++
++  renderStudents(matches);
++}
++
++function setupSearch() {
++  document.getElementById('search-box').addEventListener('input', applySearch);
++}
++
+ function init() {
+   setupLogin();
+   renderStudents(students);
+   setupAdd();
++  setupSearch();
+   console.log('SMS ready -', students.length, 'students loaded');
+ }
+ 
+diff --git a/index.html b/index.html
+index 2f5e5cc..4014076 100644
+--- a/index.html
++++ b/index.html
+@@ -35,7 +35,10 @@
+         </div>
+         <button id="add-btn">Add student</button>
+       </div>
+-      <!-- SMS-6: search box goes here -->
++      <div class="panel">
++        <label for="search-box">Search by name or roll number</label>
++        <input id="search-box" type="text" placeholder="Type to filter">
++      </div>
+       <div class="panel">
+         <h2>Students</h2>
+         <table>
+@@ -44,7 +47,7 @@
+           </thead>
+           <tbody id="student-rows"></tbody>
+         </table>
+-        <div id="empty-state" class="empty hidden">No students yet.</div>
++        <div id="empty-state" class="empty hidden">No students match.</div>
+       </div>
+     </div>
+   </main>

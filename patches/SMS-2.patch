@@ -1,0 +1,75 @@
+diff --git a/app.js b/app.js
+index e357d63..f36ba54 100644
+--- a/app.js
++++ b/app.js
+@@ -77,9 +77,47 @@ function renderStudents(list) {
+   });
+ }
+ 
++/* SMS-2 - add a new student */
++
++function clearForm() {
++  document.getElementById('add-roll').value = '';
++  document.getElementById('add-name').value = '';
++  document.getElementById('add-cls').value = '';
++  document.getElementById('add-marks').value = '';
++  document.getElementById('add-error').textContent = '';
++}
++
++function addStudent() {
++  const roll = document.getElementById('add-roll').value.trim();
++  const name = document.getElementById('add-name').value.trim();
++  const cls = document.getElementById('add-cls').value.trim();
++  const marks = document.getElementById('add-marks').value.trim();
++  const error = document.getElementById('add-error');
++
++  if (!roll || !name || !cls || !marks) {
++    error.textContent = 'Every field is required.';
++    return;
++  }
++
++  if (students.some(function (s) { return s.roll === roll; })) {
++    error.textContent = 'Roll number ' + roll + ' already exists.';
++    return;
++  }
++
++  students.push({ roll: roll, name: name, cls: cls, marks: Number(marks) });
++  saveStudents(students);
++  renderStudents(students);
++  clearForm();
++}
++
++function setupAdd() {
++  document.getElementById('add-btn').addEventListener('click', addStudent);
++}
++
+ function init() {
+   setupLogin();
+   renderStudents(students);
++  setupAdd();
+   console.log('SMS ready -', students.length, 'students loaded');
+ }
+ 
+diff --git a/index.html b/index.html
+index 869ae8a..2f5e5cc 100644
+--- a/index.html
++++ b/index.html
+@@ -24,7 +24,17 @@
+     </div>
+ 
+     <div id="app" class="hidden">
+-      <!-- SMS-2: add student form goes here -->
++      <div class="panel">
++        <h2>Add a student</h2>
++        <div id="add-error" class="error"></div>
++        <div class="row">
++          <div><label for="add-roll">Roll number</label><input id="add-roll" type="text"></div>
++          <div><label for="add-name">Name</label><input id="add-name" type="text"></div>
++          <div><label for="add-cls">Class</label><input id="add-cls" type="text"></div>
++          <div><label for="add-marks">Marks</label><input id="add-marks" type="number"></div>
++        </div>
++        <button id="add-btn">Add student</button>
++      </div>
+       <!-- SMS-6: search box goes here -->
+       <div class="panel">
+         <h2>Students</h2>
