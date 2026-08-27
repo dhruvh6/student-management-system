@@ -49,3 +49,5 @@ A Jira card moves to Done only when all four hold:
 2. Pull request reviewed by a teammate and merged into `main`
 3. Jenkins build of `main` reports SUCCESS
 4. Feature works in the running container at <http://localhost:8081>
+
+_Automatic build verification: 28 Aug 2026 01:41_
