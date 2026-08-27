@@ -106,7 +106,7 @@ function addStudent() {
 
   students.push({ roll: roll, name: name, cls: cls, marks: Number(marks) });
   saveStudents(students);
-  renderStudents(students);
+  applySearch();
   clearForm();
 }
 
@@ -114,10 +114,32 @@ function setupAdd() {
   document.getElementById('add-btn').addEventListener('click', addStudent);
 }
 
+/* SMS-6 - filter the table by name or roll number */
+
+function applySearch() {
+  const term = document.getElementById('search-box').value.trim().toLowerCase();
+
+  if (!term) {
+    renderStudents(students);
+    return;
+  }
+
+  const matches = students.filter(function (s) {
+    return s.name.toLowerCase().includes(term) || s.roll.toLowerCase().includes(term);
+  });
+
+  renderStudents(matches);
+}
+
+function setupSearch() {
+  document.getElementById('search-box').addEventListener('input', applySearch);
+}
+
 function init() {
   setupLogin();
   renderStudents(students);
   setupAdd();
+  setupSearch();
   console.log('SMS ready -', students.length, 'students loaded');
 }
 
