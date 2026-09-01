@@ -43,6 +43,34 @@ order, because they all modify `index.html` and `app.js`:
 6. `feature/SMS-8-delete`
 7. `feature/SMS-11-class-report`
 
+## Jira from the command line
+
+`tools/jira.js` reads and updates the Jira board over the REST API. Plain
+Node, no dependencies and no build step.
+
+```bash
+node tools/jira.js issues SMS      # the whole board
+node tools/jira.js issue SMS-11    # one card
+node tools/jira.js help            # everything else
+```
+
+Credentials are deliberately not in this repo. Create an API token at
+<https://id.atlassian.com/manage-profile/security/api-tokens> and put it in
+`~/.jira.env`:
+
+```
+JIRA_BASE_URL=https://your-site.atlassian.net
+JIRA_EMAIL=you@example.com
+JIRA_API_TOKEN=your-token
+```
+
+They live outside the repo because the `Dockerfile` copies this whole
+directory into the nginx web root, so anything committed here is served over
+HTTP by the running container.
+
+Commands that write to Jira print what they would do and change nothing until
+you add `--yes`.
+
 ## Definition of done
 
 A Jira card moves to Done only when all four hold:
