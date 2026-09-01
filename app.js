@@ -60,6 +60,10 @@ function renderStudents(list) {
   const empty = document.getElementById('empty-state');
   body.innerHTML = '';
 
+  /* SMS-11 - the report always describes every student, so it is handed the
+     full list rather than the filtered one passed in here. */
+  renderReport(students);
+
   if (list.length === 0) {
     empty.classList.remove('hidden');
     return;
@@ -186,6 +190,97 @@ function deleteStudent(roll) {
   students = students.filter(function (s) { return s.roll !== roll; });
   saveStudents(students);
   applySearch();
+}
+
+/* SMS-11 - class-wise performance report */
+
+const PASS_MARK = 35;
+
+function buildReport(list) {
+  const groups = {};
+
+  list.forEach(function (student) {
+    const marks = Number(student.marks);
+
+    if (!groups[student.cls]) {
+      groups[student.cls] = { count: 0, graded: 0, total: 0, high: null, low: null, passed: 0 };
+    }
+
+    const group = groups[student.cls];
+    group.count += 1;
+
+    /* The add and edit forms do not check that marks are numeric, so a record
+       can hold something that is not a number. Those students are still
+       counted, but they stay out of the marks figures so they cannot drag an
+       average to NaN. */
+    if (!Number.isFinite(marks)) return;
+
+    group.graded += 1;
+    group.total += marks;
+    if (marks >= PASS_MARK) group.passed += 1;
+    if (group.high === null || marks > group.high) group.high = marks;
+    if (group.low === null || marks < group.low) group.low = marks;
+  });
+
+  return Object.keys(groups).sort().map(function (cls) {
+    const group = groups[cls];
+    return {
+      cls: cls,
+      count: group.count,
+      average: group.graded ? group.total / group.graded : null,
+      high: group.high,
+      low: group.low,
+      passed: group.passed
+    };
+  });
+}
+
+function renderReport(list) {
+  const body = document.getElementById('report-rows');
+  const empty = document.getElementById('report-empty');
+  const overall = document.getElementById('report-overall');
+  const rows = buildReport(list);
+
+  body.innerHTML = '';
+
+  if (rows.length === 0) {
+    empty.classList.remove('hidden');
+    overall.textContent = '';
+    return;
+  }
+  empty.classList.add('hidden');
+
+  rows.forEach(function (row) {
+    const tr = document.createElement('tr');
+    const cells = [
+      row.cls,
+      row.count,
+      row.average === null ? '-' : row.average.toFixed(1),
+      row.high === null ? '-' : row.high,
+      row.low === null ? '-' : row.low,
+      row.passed + ' / ' + row.count
+    ];
+
+    cells.forEach(function (value) {
+      const cell = document.createElement('td');
+      /* textContent, not innerHTML - a class name is typed by the teacher and
+         could otherwise inject markup into this table. */
+      cell.textContent = value;
+      tr.appendChild(cell);
+    });
+
+    body.appendChild(tr);
+  });
+
+  const graded = list.filter(function (s) { return Number.isFinite(Number(s.marks)); });
+  const total = graded.reduce(function (sum, s) { return sum + Number(s.marks); }, 0);
+
+  const count = function (n, one, many) { return n + ' ' + (n === 1 ? one : many); };
+
+  overall.textContent =
+    count(list.length, 'student', 'students') + ' across ' +
+    count(rows.length, 'class', 'classes') +
+    (graded.length ? ', overall average ' + (total / graded.length).toFixed(1) : '');
 }
 
 function init() {

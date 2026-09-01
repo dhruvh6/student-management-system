@@ -81,3 +81,5 @@ th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: upp
 .error { color: var(--danger); font-size: 13px; margin-bottom: 12px; min-height: 18px; }
 .empty { color: var(--muted); font-size: 14px; padding: 18px 0; text-align: center; }
 .hidden { display: none; }
+
+#report-overall { color: var(--muted); font-size: 13px; margin: 14px 0 0; }
