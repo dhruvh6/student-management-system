@@ -12,6 +12,7 @@ All student records in this project are dummy data.
 | Dhruv | SMS-1, SMS-3 |
 | Janhavi | SMS-2, SMS-8, SMS-9 |
 | Mayank | SMS-6, SMS-7, SMS-10 |
+| Prakriti | SMS-11 |
 
 ## Run locally
 
@@ -40,6 +41,7 @@ order, because they all modify `index.html` and `app.js`:
 4. `feature/SMS-6-search`
 5. `feature/SMS-7-edit`
 6. `feature/SMS-8-delete`
+7. `feature/SMS-11-class-report`
 
 ## Definition of done
 
